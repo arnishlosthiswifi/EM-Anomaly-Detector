@@ -1,0 +1,156 @@
+#REQUIREMENTS:
+pyserial
+numpy
+matplotlib
+==================================================================================================================================================================
+#WARNING:
+# ⚠️ Important Setup & Usage Warnings
+
+Please read this before running the EM Diagnostic System.
+
+## 1. COM Port May Be Different
+
+The current Python program is configured to use:
+
+```python
+PORT = "COM7"
+```
+
+**COM7 will NOT work for everyone.**
+
+Windows assigns a COM port to the ESP32 depending on the computer, USB port, drivers, and other connected serial devices.
+
+For example, another computer may detect the ESP32 as:
+
+```text
+COM3
+COM4
+COM5
+COM8
+COM10
+```
+
+### How to fix it
+
+Open **Windows Device Manager → Ports (COM & LPT)** and find the ESP32's assigned COM port.
+
+Then change this line in `mainSoft.py`:
+
+```python
+PORT = "COM7"
+```
+
+For example:
+
+```python
+PORT = "COM5"
+```
+
+---
+
+## 2. ESP32 Must Be Connected
+
+The Python program requires an ESP32 connected through USB.
+
+If the ESP32 is not connected, the selected COM port is incorrect, or the required USB/serial driver is missing, the program may fail to connect.
+
+---
+
+## 3. Close Other Serial Monitor Programs
+
+Only one program can normally use the ESP32's serial connection at a time.
+
+Close:
+
+- Arduino Serial Monitor
+- Arduino Serial Plotter
+- Other Python serial programs
+- Any other application currently using the ESP32 COM port
+
+before running `mainSoft.py`.
+
+---
+
+## 4. Calibrate Before Testing
+
+The system requires a baseline before a device can be tested.
+
+Run:
+
+```text
+1. Calibrate
+```
+
+using a known-good device first.
+
+This creates:
+
+```text
+baseline.json
+```
+
+If no baseline exists, the program will ask you to calibrate first.
+
+---
+
+## 5. Keep Testing Conditions Consistent
+
+For reliable results, try to keep the following consistent between calibration and testing:
+
+- Distance between the device and sensing coil
+- Position and orientation of the device
+- Sampling setup
+- Device operating conditions
+- Surrounding electromagnetic interference
+
+Large changes in positioning or environmental noise can affect the measured electromagnetic signal.
+
+---
+
+## 6. Do Not Delete `baseline.json` Before Testing
+
+`baseline.json` contains the reference frequency obtained during calibration.
+
+If it is deleted, moved, or replaced, the system will need to be calibrated again.
+
+---
+
+## 7. Python Dependencies
+
+Install the required packages using:
+
+```bash
+pip install -r requirements.txt
+```
+
+The project requires:
+
+- PySerial
+- NumPy
+- Matplotlib
+
+---
+
+## 8. Hardware Variations
+
+The results may vary depending on the sensing coil, ESP32 board, device under test, power source, distance, and surrounding electromagnetic noise.
+
+The current system is a prototype designed to detect significant changes in the measured electromagnetic frequency response.
+
+---
+
+## 9. Recommended First Run
+
+A typical setup should be:
+
+```text
+1. Connect ESP32
+2. Check its COM port
+3. Update PORT in mainSoft.py if necessary
+4. Install requirements
+5. Run mainSoft.py
+6. Calibrate using a known-good device
+7. Test the device
+```
+
+If something doesn't work, **check the COM port first**.
